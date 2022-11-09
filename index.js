@@ -66,30 +66,6 @@ async function run() {
     }
 }
 
-// async function run() {
-//     try {
-//         const reviewCollection = client.db('trust').collection('reviews');
-
-//         app.get('/reviews', async (req, res) => {
-//             const query = {};
-//             const cursor = reviewCollection.find(query);
-//             const reviews = await cursor.toArray();
-//             res.send(reviews);
-//         })
-
-
-//         app.post('/review', async (req, res) => {
-//             const service = req.body;
-//             console.log(service);
-//             const result = await reviewCollection.insertOne(service)
-//             res.send(result);
-//         })
-//     }
-//     finally {
-
-//     }
-// }
-
 run().catch(err => console.log(err));
 
 app.get('/', (req, res) => {
