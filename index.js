@@ -11,10 +11,6 @@ const port = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
-// DB_USERNAME=trust2023
-// DB_PASSWORD=bFDx4yi7PDizMtgJ
-
-// console.log(process.env.DB_USER, process.env.DB_PASSWORD)
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.wx23zka.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -66,6 +62,31 @@ async function run() {
             console.log(reviews);
             const result = await reviewCollection.insertOne(reviews)
             res.send(result);
+        })
+
+        // review api
+        app.get('/review', async (req, res) => {
+            let query = {};
+            if (req.query.serviceId) {
+                query = {
+                    serviceId: req.query.serviceId,
+                }
+            }
+            const cursor = reviewCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        })
+
+        app.get('/myreview', async (req, res) => {
+            let query = {};
+            if (req.query.email) {
+                query = {
+                    email: req.query.email,
+                }
+            }
+            const cursor = reviewCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
         })
 
     }
