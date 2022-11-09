@@ -45,6 +45,7 @@ async function run() {
             res.send(result);
         })
 
+        // get all review
         app.get('/reviews', async (req, res) => {
             const query = {};
             const cursor = reviewCollection.find(query);
@@ -52,11 +53,18 @@ async function run() {
             res.send(reviews);
         })
 
+        // get single review
+        app.get('/review/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const review = await reviewCollection.findOne(query);
+            res.send(review);
+        })
         // port review
         app.post('/reviews', async (req, res) => {
-            const service = req.body;
-            console.log(service);
-            const result = await reviewCollection.insertOne(service)
+            const reviews = req.body;
+            console.log(reviews);
+            const result = await reviewCollection.insertOne(reviews)
             res.send(result);
         })
 
