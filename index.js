@@ -43,14 +43,14 @@ async function run() {
 
         app.get('/services', async (req, res) => {
             const query = {};
-            const cursor = serviceCollection.find(query);
+            const cursor = serviceCollection.find(query).sort({ submissionTime: -1 });
             const services = await cursor.toArray();
             res.send(services);
         });
 
         app.get('/services/home', async (req, res) => {
             const query = {};
-            const cursor = serviceCollection.find(query).sort({ length: -1 }).limit(3);
+            const cursor = serviceCollection.find(query).sort({ submissionTime: -1 }).limit(3);
             const services = await cursor.toArray();
             res.send(services);
         });
@@ -100,22 +100,24 @@ async function run() {
                     serviceId: req.query.serviceId,
                 }
             }
-            const cursor = reviewCollection.find(query);
+            const cursor = reviewCollection.find(query).sort({ submissionTime: -1 });
             const reviews = await cursor.toArray();
             res.send(reviews);
         });
 
         app.get('/myreviews', verifyJWT, async (req, res) => {
-            const decoded = req.decoded;;
-            if (decoded.email !== req.query.email) { }
-            res.status(403).send({ message: 'unauthorized access' })
+            const decoded = req.decoded;
+            console.log('inside orders api', decoded);
+            if (decoded.email !== req.query.email) {
+                res.status(403).send({ message: 'unauthorized access' })
+            }
             let query = {};
             if (req.query.email) {
                 query = {
                     email: req.query.email,
                 }
             }
-            const cursor = reviewCollection.find(query);
+            const cursor = reviewCollection.find(query).sort({ submissionTime: -1 });
             const result = await cursor.toArray();
             res.send(result);
         });
